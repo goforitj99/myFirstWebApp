@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Culcom</title>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        document.body.style.textAlign = 'center';
+        document.body.style.marginTop = '100px';
+        document.body.style.minHeight = '100vh';
+
+        document.body.style.backgroundImage = `url('background_2.jpg')`;
+        document.body.style.backgroundWidth = '100vw';
+        document.body.style.backgroundPosition = 'center top';
+        document.body.style.backgroundSize = 'cover';
+        document.body.style.backgroundRepeat = 'no-repeat';
+
+        let memberList = [];
+
+        const head = document.querySelector('div#head');
+
+        head.style.height = '60px';
+
+        const input = document.querySelector('input');
+        input.style.verticalAlign = 'middle';
+        input.style.textAlign = 'center';
+        input.style.fontWeight = 'bolder';
+        input.style.height = '50px';
+        input.style.width = '210px';
+        input.style.fontSize = '25px';
+        input.style.borderRadius = '10px';
+
+        const h2Members = document.querySelector('h2#members');
+        h2Members.style.display = 'inline-block';
+        h2Members.style.backgroundColor = 'rgba(224,255,255,0.7)'; // lightcyan #e0ffff
+        h2Members.style.paddingTop = '12px';
+        h2Members.style.paddingBottom = '12px';
+        h2Members.style.paddingLeft = '20px';
+        h2Members.style.paddingRight = '20px';
+        h2Members.style.borderRadius = '10px';
+        h2Members.style.height = '34px';
+        h2Members.textContent = `Today's Members  :  `;
+
+        const h2Style = () => {
+          h2Members.style.backgroundColor = 'rgba(224,255,255,0.7)'; // lightcyan #e0ffff
+          h2Members.style.paddingTop = '12px';
+          h2Members.style.paddingBottom = '12px';
+          h2Members.style.paddingLeft = '20px';
+          h2Members.style.paddingRight = '20px';
+          h2Members.style.borderRadius = '10px';
+        };
+
+        const addButton = document.querySelector('button#add');
+        addButton.style.verticalAlign = 'middle';
+        addButton.style.height = '56px';
+        addButton.style.width = '100px';
+        addButton.style.marginLeft = '10px';
+        addButton.style.fontSize = '30px';
+        addButton.style.borderRadius = '10px';
+
+        addButton.addEventListener('click', () => {
+          if (input.value !== '') {
+            memberList.push(`${input.value}`);
+            if (memberList.length > 1) {
+              h2Members.textContent = `Today's Members  :  ${memberList[0]}`;
+
+              let str = '';
+
+              for (let i = 1; i < memberList.length; i++) {
+                str += `, ${memberList[i]}`;
+              }
+
+              h2Members.textContent += str;
+
+              h2Style();
+            } else {
+              h2Members.textContent = `Today's Members  :  ${memberList[0]}`;
+
+              h2Style();
+            }
+            input.value = '';
+          } else {
+            alert('값을 입력하세요!');
+          }
+        });
+
+        const deleteButton = document.querySelector('button#delete');
+        deleteButton.style.verticalAlign = 'middle';
+        deleteButton.style.height = '56px';
+        deleteButton.style.width = '100px';
+        deleteButton.style.marginLeft = '10px';
+        deleteButton.style.fontSize = '20px';
+        deleteButton.style.fontWeight = 'bolder';
+        deleteButton.style.borderRadius = '10px';
+        deleteButton.addEventListener('click', () => {
+          if (input.value !== '') {
+            if (memberList.indexOf(`${input.value}`) < 0) {
+              alert('이름을 정확히 입력하세요');
+            } else {
+              memberList.splice(memberList.indexOf(`${input.value}`), 1);
+              if (memberList.length > 0) {
+                h2Members.textContent = `Today's Members  :  ${memberList[0]}`;
+
+                let str = '';
+
+                for (let i = 1; i < memberList.length; i++) {
+                  str += `, ${memberList[i]}`;
+                }
+
+                h2Members.textContent += str;
+
+                h2Style();
+              } else {
+                h2Members.textContent = `Today's Members  :  `;
+
+                h2Style();
+              }
+              input.value = '';
+            }
+          } else {
+            alert('값을 입력하세요!');
+          }
+        });
+
+        const listResetButton = document.querySelector('button#listReset');
+        listResetButton.style.verticalAlign = 'middle';
+        listResetButton.style.height = '56px';
+        listResetButton.style.width = '150px';
+        listResetButton.style.marginLeft = '10px';
+        listResetButton.style.fontSize = '20px';
+        listResetButton.style.fontWeight = 'bold';
+        listResetButton.style.borderRadius = '10px';
+        listResetButton.addEventListener('click', () => {
+          memberList = [];
+          h2Members.textContent = `Today's Members  :  `;
+          // window.location.reload();
+        });
+
+        const divForDisplayMembers =
+          document.querySelector('div#displayMember');
+        divForDisplayMembers.style.marginTop = '25px';
+
+        const divForResult = document.querySelector('div#result');
+
+        const buttonForDice = document.querySelector('button#buttonForDice');
+        const diceImg = document.querySelector('img#dice');
+        buttonForDice.style.height = '100px';
+        buttonForDice.style.width = '100px';
+        buttonForDice.style.marginTop = '25px';
+        buttonForDice.style.marginBottom = '30px';
+        buttonForDice.style.borderRadius = '10px';
+        diceImg.style.height = '90px';
+        diceImg.style.width = '90px';
+        buttonForDice.style.textAlign = 'center';
+        diceImg.setAttribute('src', 'dice.png');
+
+        let h1Result = [];
+
+        let finalList = [];
+        let randomArr = [];
+
+        let handlerForDice = 0;
+
+        buttonForDice.addEventListener('click', () => {
+          if (handlerForDice === 0 && 3 <= memberList.length) {
+            while (true) {
+              const randomNum = Math.floor(Math.random() * memberList.length);
+
+              if (randomArr.length === 0) {
+                randomArr[0] = memberList[randomNum];
+              } else {
+                if (randomArr.indexOf(memberList[randomNum]) < 0) {
+                  randomArr.push(memberList[randomNum]);
+                }
+              }
+
+              if (randomArr.length === memberList.length) {
+                finalList = finalList.concat(randomArr);
+                randomArr = [];
+              }
+
+              if (finalList.length >= 10) {
+                finalList = finalList.slice(0, 10);
+                handlerForDice = 1;
+                break;
+              }
+            }
+
+            for (let i = 0; i < finalList.length; i++) {
+              setTimeout(() => {
+                h1Result[i] = document.createElement('h1');
+                h1Result[i].textContent = `${(i + 1) % 10}. ${finalList[i]}`;
+                h1Result[i].style.display = 'inline-block';
+                h1Result[i].style.backgroundColor = 'rgba(245,255,250,0.8)';
+                h1Result[i].style.paddingTop = '10px';
+                h1Result[i].style.paddingBottom = '10px';
+                h1Result[i].style.paddingLeft = '30px';
+                h1Result[i].style.paddingRight = '10px';
+                h1Result[i].style.marginTop = '0px';
+                h1Result[i].style.marginBottom = '10px';
+                h1Result[i].style.borderRadius = '10px';
+                h1Result[i].style.width = '180px';
+                h1Result[i].style.textAlign = 'start';
+                const br = document.createElement('br');
+                divForResult.appendChild(h1Result[i]);
+                divForResult.appendChild(br);
+              }, (i + 1) * 495);
+            }
+          }
+        });
+
+        const resetButton = document.querySelector('button#reset');
+        resetButton.style.height = '60px';
+        resetButton.style.width = '150px';
+        resetButton.style.fontSize = '30px';
+        resetButton.style.fontWeight = 'bolder';
+        resetButton.style.borderRadius = '10px';
+        resetButton.addEventListener('click', () => {
+          for (let i = 0; i < 10; i++) {
+            divForResult.textContent = '';
+          }
+
+          finalList = [];
+          h1Result = [];
+          handlerForDice = 0;
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div id="head">
+      <input type="text" />
+      <button id="add">ADD</button>
+      <button id="delete">DELETE</button>
+      <button id="listReset">LIST RESET</button>
+    </div>
+
+    <div id="displayMember">
+      <h2 id="members"></h2>
+    </div>
+
+    <button id="buttonForDice">
+      <img id="dice" src="" alt="" />
+    </button>
+
+    <div id="result"></div>
+
+    <br /><br />
+
+    <button id="reset">RESET</button>
+  </body>
+</html>
